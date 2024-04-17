@@ -2,7 +2,6 @@ package com.example.jpa;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +20,9 @@ public class Empleado {
     private Date fechaContratacion;
     private Date fechaCese;
     private MotivoCese motivoCese;
-    private double salario;
-    private double comision;
+
+    @OneToOne(mappedBy = "empleado", cascade = CascadeType.ALL)
+    private InformacionEconomica informacionEconomica;
 
     @ManyToOne
     @JoinColumn(name = "departamento_id")
@@ -35,7 +35,7 @@ public class Empleado {
     @OneToOne(mappedBy = "empleado", cascade = CascadeType.ALL)
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Puesto> puestos;
 
     @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL)
@@ -132,21 +132,7 @@ public class Empleado {
         this.motivoCese = motivoCese;
     }
 
-    public double getSalario() {
-        return salario;
-    }
 
-    public void setSalario(double salario) {
-        this.salario = salario;
-    }
-
-    public double getComision() {
-        return comision;
-    }
-
-    public void setComision(double comision) {
-        this.comision = comision;
-    }
 
     public Departamento getDepartamento() {
         return departamento;
